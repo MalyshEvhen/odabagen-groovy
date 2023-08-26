@@ -7,11 +7,12 @@ import com.drew.metadata.Metadata
 import com.drew.metadata.Tag
 import com.github.malyshevhen.options.GlobalOptions
 import com.github.malyshevhen.scan.tasks.VideoFileSearchTask
-import com.github.malyshevhen.util.screenshot.VideoScreenshotCreator
-import picocli.CommandLine.Mixin
+import com.github.malyshevhen.util.markdown.FileUtil
+import com.github.malyshevhen.util.markdown.MarkdownUtil
+import com.github.malyshevhen.util.screenshot.ScreenshotUtil
 import picocli.CommandLine.Command
+import picocli.CommandLine.Mixin
 import picocli.CommandLine.Option
-
 
 @Command(name = 'scan',
         description = 'Find all video in given directory.',
@@ -58,9 +59,18 @@ class ScanCommand implements Runnable {
             }
 
             if (createDb) {
-                videoFiles.forEach(VideoScreenshotCreator::takeScreenshots)
-            }
+                def pictures = videoFiles
+                        .stream()
+                        .map(ScreenshotUtil::takeScreenshots)
+                        .toList()
 
+                def mds = pictures.stream().map(it -> {
+                    def mdCreator = new MarkdownUtil(it)
+                    return mdCreator.buildArchiveCard()
+                }).toList()
+
+                mds.each { FileUtil::save(it) }
+            }
         } else println 'Scan command run not in verbose mode...'
     }
 
@@ -78,6 +88,6 @@ class ScanCommand implements Runnable {
             }
             counter = 0
         }
-    }
 
+    }
 }
