@@ -7,8 +7,10 @@ import com.drew.metadata.Metadata
 import com.drew.metadata.Tag
 import com.github.malyshevhen.options.GlobalOptions
 import com.github.malyshevhen.scan.tasks.VideoFileSearchTask
-import picocli.CommandLine
+import com.github.malyshevhen.util.screenshot.VideoScreenshotCreator
+import picocli.CommandLine.Mixin
 import picocli.CommandLine.Command
+import picocli.CommandLine.Option
 
 
 @Command(name = 'scan',
@@ -19,16 +21,15 @@ class ScanCommand implements Runnable {
     public static DOUBLE_LINE_SEPARATOR = '========================================================'
     public static SINGLE_LINE_SEPARATOR = '--------------------------------------------------------'
 
-    @CommandLine.Mixin
+    @Mixin
     GlobalOptions globalOptions
 
-    @CommandLine.Option(names = ['-i', '--input-folder'],
+    @Option(names = ['-i', '--input-folder'],
             description = 'Input folder path. Default: current folder')
     File inputFolder = new File(System.getProperty('user.dir'))
 
-    @CommandLine.Option(names = ["-o", "--output-folder"],
-            description = 'Output folder path. Default: input folder')
-    File outputFolder = inputFolder
+    @Option(names = ['-db', '--create-db'])
+    boolean createDb
 
     @Override
     void run() {
@@ -56,6 +57,10 @@ class ScanCommand implements Runnable {
                 if (metadata != null) printDirectories(metadata)
             }
 
+            if (createDb) {
+                videoFiles.forEach(VideoScreenshotCreator::takeScreenshots)
+            }
+
         } else println 'Scan command run not in verbose mode...'
     }
 
@@ -74,6 +79,5 @@ class ScanCommand implements Runnable {
             counter = 0
         }
     }
-
 
 }
