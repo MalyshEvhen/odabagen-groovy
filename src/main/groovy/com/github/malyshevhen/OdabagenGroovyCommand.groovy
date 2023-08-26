@@ -1,15 +1,14 @@
 package com.github.malyshevhen
 
+import com.github.malyshevhen.scan.ScanCommand
 import io.micronaut.configuration.picocli.PicocliRunner
-import io.micronaut.context.ApplicationContext
-
-import picocli.CommandLine
 import picocli.CommandLine.Command
 import picocli.CommandLine.Option
-import picocli.CommandLine.Parameters
 
-@Command(name = 'odabagen-groovy', description = '...',
-        mixinStandardHelpOptions = true)
+@Command(name = 'odabagen',
+        description = 'Application for generating video catalog in Obsidian and DB folder plugin',
+        mixinStandardHelpOptions = true,
+        subcommands = [ScanCommand])
 class OdabagenGroovyCommand implements Runnable {
 
     @Option(names = ['-v', '--verbose'], description = '...')
