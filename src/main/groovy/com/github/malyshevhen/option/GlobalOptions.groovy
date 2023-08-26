@@ -1,4 +1,4 @@
-package com.github.malyshevhen.options
+package com.github.malyshevhen.option
 
 import picocli.CommandLine.Option
 

@@ -1,4 +1,4 @@
-package com.github.malyshevhen.scan.tasks
+package com.github.malyshevhen.command.tasks
 
 import java.util.concurrent.ForkJoinPool
 import java.util.concurrent.RecursiveTask

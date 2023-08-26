@@ -1,0 +1,4 @@
+#Sat Aug 26 08:49:39 GMT 2023
+micronaut:
+  application:
+    name: odabagen-groovy
